@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Export History",
-  "description": "Download your full chrome history in csv and json",
+  "name": "History Visualization",
+  "description": "This extension visualize your browser history to help you understand your online time usage",
   "version": "1.0",
 
   "permissions": [
@@ -12,5 +12,7 @@
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
+    
+     
   }
 }

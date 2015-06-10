@@ -19,15 +19,34 @@ var download = function(format){
     if(format==="csv"){
       filename = "history.csv";
 
+
+
       // header row
       var keys = Object.keys(res[0]);
-      append(keys.join(","));
+      append("formattedLastVisitTime," + keys.join(","));
 
-      var row;
+      var row, time, value;
+      var link;
       for(var i=0; i<res.length; i++){
+        
         row = "";
+
+        // convert time for excel
+        time = new Date(res[i]["lastVisitTime"]);
+        formatted = time.toISOString().replace('T', ' ').replace(/\.\d+Z/, '');
+        row += formatted + ",";
+
         for(var j=0; j<keys.length; j++){
-          row += JSON.stringify(res[i][keys[j]]);
+        
+          if(j==4){
+            link = JSON.stringify(res[i][keys[j]]);
+            var rlink = getHostName(link);
+            row += rlink;
+          }else{
+            row += JSON.stringify(res[i][keys[j]]);
+          }
+          
+          
           if(j !== keys.length-1) row += ",";
         }
         append("\n" + row);
@@ -56,15 +75,33 @@ var download = function(format){
   });
 }
 
+
 document.addEventListener('DOMContentLoaded', function () {
   window.data = document.getElementById('data');
 
-  document.getElementById('json').onclick = function(){
-    download('json');
-  };
+  // document.getElementById('json').onclick = function(){
+  //   download('json');
+  // };
 
   document.getElementById('csv').onclick = function(){
     download('csv');
   };
+
+  
+  document.getElementById('viz').onclick = function(){
+    window.open("http://www.google.com");
+  }
 });
+
+
+function getHostName(url) {
+    var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+    if (match != null && match.length > 2 &&
+        typeof match[2] === 'string' && match[2].length > 0) {
+    return match[2];
+    }
+    else {
+        return null;
+    }
+}
 
